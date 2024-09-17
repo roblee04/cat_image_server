@@ -4,8 +4,10 @@
 <body>
 
   <p>Results</p>
-    {% for img_path in imgs %}
-        <img src="{{img_path}}">
+    {% for img_path, sim in imgs %}
+    <!-- <img src="{{url_for('static', filename=img_path)}}"> -->
+    {{sim}}
+    <img src="{{ img_path }}" style="max-width: 15%; height: auto;">
     {% endfor %}
 
 </body>

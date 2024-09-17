@@ -1,0 +1,9 @@
+http://images.cocodataset.org/val2014/COCO_val2014_000000159977.jpg
+http://images.cocodataset.org/val2014/COCO_val2014_000000311295.jpg
+http://images.cocodataset.org/val2014/COCO_val2014_000000457834.jpg
+http://images.cocodataset.org/val2014/COCO_val2014_000000555472.jpg
+http://images.cocodataset.org/val2014/COCO_val2014_000000174070.jpg
+http://images.cocodataset.org/val2014/COCO_val2014_000000460929.jpg
+https://i.redd.it/f58v4g8mwh551.jpg
+https://i.redd.it/f8w05ja8s4e61.png
+https://i.redd.it/c4d2tvxsryl51.jpg

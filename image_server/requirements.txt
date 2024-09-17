@@ -1,0 +1,10 @@
+flask
+
+git+https://github.com/openai/clip
+tqdm
+pillow
+torch
+torchvision
+matplotlib
+requests
+numpy
