@@ -1,7 +1,8 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request, redirect
 from flask_cors import CORS, cross_origin
 import subprocess
-
+import requests
+from PIL import Image
 import model
 
 
@@ -20,8 +21,8 @@ def index():
 def search(query: str):
 
     # QUERY
-    # escape character for each search term
-    # tilde is the escape character
+    # INPUT: /search/potato+dog-red
+    # OUTPUT: ['potato', '+', 'dog', '-', 'red']
     # parse search
     queries = []
 
@@ -44,10 +45,9 @@ def search(query: str):
         
         s += cur_char
 
-    print(queries)
-
+    # initialize and search model
     img_model = model.Model()
-    sim_res = img_model.query(queries[0])
+    sim_res = img_model.query(queries)
     # have idx, convert to urls
 
     with open('image_urls.txt', 'r') as f:
@@ -55,7 +55,7 @@ def search(query: str):
     
     results = []
     for sim, idx in sim_res:
-        results.append((image_urls[idx], int(sim)))
+        results.append((image_urls[idx], int(sim*1000)))
 
     # rclip_proc = ["rclip", "-fn", "-t", "10"]
     # rclip_proc.extend(queries)
@@ -77,9 +77,33 @@ def search(query: str):
     response = jsonify({"query":query, "result":results})
     # response.headers.add('Access-Control-Allow-Origin', '*')
     
-
-    # return response
     return render_template('results.html', imgs=results)
+
+@app.route('/upload/', methods=['GET', 'POST'])
+def upload_files():
+    if request.method == 'POST':
+        urls = request.form['urls']
+        urls_list = urls.splitlines()
+
+        # Process urls
+        image_database = []
+        with open('image_urls.txt', 'a') as f:
+            for url in urls_list:
+                url = url.strip()
+                # turn url into Pillow object
+                image_database.append(Image.open(requests.get(url, stream=True).raw))
+                # append to image_urls.txt
+                f.write('\n' + url)
+        
+        print(image_database)
+            
+        img_model = model.Model()
+        img_model.add_to_db(image_database)
+
+        
+        return redirect(request.url) 
+
+    return render_template('upload.html')
 
 # Start the Server
 
